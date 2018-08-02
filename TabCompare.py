@@ -1,6 +1,6 @@
 #########################################################################################################
 # TabCompare
-# v1.1
+# v1.3
 # This script uses the Tableau Server Client To Compare Content on 2x Tableau Server Environments
 # For more information, refer http://tableaujunkie.com
 # To run the script, you must have installed Python 2.7.X or 3.3 and later.
@@ -15,6 +15,10 @@ from threading import Thread
 import requests
 import tableauserverclient as TSC
 from wand.image import Image
+
+#v1.3 surpress SSL certificate warnings
+from requests.packages.urllib3.exceptions import InsecureRequestWarning
+requests.packages.urllib3.disable_warnings(InsecureRequestWarning)
 
 os.environ['MAGICK_HOME'] = os.path.abspath('.')
 
@@ -45,6 +49,7 @@ def getSite(serverName):
         # Step 1: Sign in to server.
         tableau_auth = TSC.TableauAuth(args.u, password, site_id=args.si)
         server = TSC.Server(serverName)
+        server.add_http_options({'verify': False})
         server.version = APIVERSION
 
         with server.auth.sign_in(tableau_auth):
@@ -66,6 +71,7 @@ def getAllSites(serverName):
         # Step 1: Sign in to server.
         tableau_auth = TSC.TableauAuth(args.u, password, site_id="")
         server = TSC.Server(serverName)
+        server.add_http_options({'verify': False})
         # The new endpoint was introduced in Version 2.4
         server.version = APIVERSION
 
@@ -88,6 +94,7 @@ def generateSiteImages(serverName, site, filepath):
 
     tableau_auth = TSC.TableauAuth(args.u, password, site_id=site_id)
     server = TSC.Server(serverName)
+    server.add_http_options({'verify': False})
     server.version = APIVERSION
     with server.auth.sign_in(tableau_auth):
         print("signed in to " + serverName, site.name, site.content_url, site.state)
@@ -156,7 +163,7 @@ def generateSiteImages(serverName, site, filepath):
                 imageUrl = siteUrl + "/views/" + view.content_url.replace("/sheets","") + ".png"
                 #print (imageUrl)
 
-                r = requests.get(imageUrl,headers = h)
+                r = requests.get(imageUrl,headers = h,verify=False)
 
                 #print r.headers.get('content-type')
 

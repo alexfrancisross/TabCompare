@@ -1,5 +1,5 @@
 ----------------------
-TabCompare Version 1.2
+TabCompare Version 1.3
 ----------------------
 TabCompare is a command line utility to help compare the format of Tableau content on 2x separate Tableau Server instances. 
 TabCompare is designed to help identify any formatting differences between different versions of Tableau Sever.
@@ -37,4 +37,7 @@ TabCompare.exe --sa http://tabserverA.tableaujunkie.com:8000 --sb http://tabserv
 Or to get all views in the “Google Analytics” workbook on a site called “TableauJunkie” using the mean_absolute compare metric, run the following:
 TabCompare.exe --sa http://tabserverA.tableaujunkie.com:8000 --sb http://tabserverB.tableaujunkie.com:8000 --u admin --f C:\TabCompare\Images --wi "Google Analytics" --si TableauJunkie --cm mean_absolute
 
-
+----------------------
+Changes
+----------------------
+v1.3 - fixed 'SSL: CERTIFICATE_VERIFY_FAILED' issue when conecting to Tableau Server with SSL enabled
